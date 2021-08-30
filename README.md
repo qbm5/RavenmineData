@@ -5,7 +5,7 @@ Very simple node script to read a bit of extra data from the ravenmine pool.
 Requires node to be installed to work.
 Data is accurate for around 12 hours then we run out of data.  console must continue to run to collect more data.  Longer timeframes will populate accurately if the app keep running
 
-run with --  node main --u <Wallet Address>
+run with:  node main --u walletxxxxxxxxxxxxxxxxxxxx
   
 
 Output updates every 60 seconds
