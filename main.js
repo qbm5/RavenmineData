@@ -8,10 +8,11 @@ for (let i = 0; i < process.argv.length; i++) {
     const arg = process.argv[i];
     if (arg.toLowerCase() == '--u' && process.argv[i + 1]) {
         walletString = process.argv[i + 1]
-    } else {
-        console.error('Could not locate wallet address.  Example: node main --u xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
     }
+}
 
+if (walletString === '') {
+    console.error('Could not locate wallet address.  Example: node main --u xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
 }
 
 
@@ -75,6 +76,12 @@ class MiningInfo {
             }
         }
 
+        // remove data older than 36 hours
+        const oldest = new Date();
+        oldest.setHours(oldest.getHours() - 36);
+        this.blocks = this.blocks.filter(b => { return new Date(b.time) > oldest })
+
+        // store locally to build up.  Used to populate data over 12 hours old, and to ensure data inst lost when you have to close the app
         localStorage.setItem('blocks', JSON.stringify(this.blocks));
     }
 
@@ -115,7 +122,7 @@ const miner = new MiningInfo();
 
 function writeToConsole() {
     miner.UpdateStats().then(() => {
-        console.log('----------');
+        console.log('     ');
         console.log(`${new Date().toLocaleString()} -- Current Price: $${miner.usd}`);
         console.log(`${miner.GetLast(" 1 Hour ", 1)}`);
         console.log(`${miner.GetLast(" 2 Hour ", 2)}`);
