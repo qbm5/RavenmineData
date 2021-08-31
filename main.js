@@ -86,9 +86,13 @@ class MiningInfo {
     }
 
     /** Create output  */
-    GetLast(title, hr) {
-        const start = new Date();
-        start.setHours(start.getHours() - hr);
+    GetLast(title, hr, time) {
+        let start = new Date();
+        if (hr) {
+            start.setHours(start.getHours() - hr);
+        } else {
+            start = time;
+        }
         let sum = 0;
         let cnt = 0;
         let pending = 0;
@@ -122,8 +126,10 @@ const miner = new MiningInfo();
 
 function writeToConsole() {
     miner.UpdateStats().then(() => {
+        var startOfDay = new Date((new Date()).setHours(0, 0, 0, 0));
         console.log('     ');
         console.log(`${new Date().toLocaleString()} -- Current Price: $${miner.usd}`);
+        console.log(`${miner.GetLast("  Today ", null, startOfDay)}`);
         console.log(`${miner.GetLast(" 1 Hour ", 1)}`);
         console.log(`${miner.GetLast(" 2 Hour ", 2)}`);
         console.log(`${miner.GetLast(" 6 Hours", 6)}`);
