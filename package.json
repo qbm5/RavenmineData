@@ -1,0 +1,14 @@
+{
+    "version": "1.0.0",
+    "name": "Something",
+    "private": true,
+    "dependencies": {
+        "axios": "^0.14.0",
+        "node-localstorage": "^2.2.1"
+    },
+    "browserslist": [
+        "last 1 version",
+        "> 1%",
+        "IE 11"
+    ]
+}
