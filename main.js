@@ -76,9 +76,9 @@ class MiningInfo {
             }
         }
 
-        // remove data older than 36 hours
+        // remove data older than 50 hours
         const oldest = new Date();
-        oldest.setHours(oldest.getHours() - 36);
+        oldest.setHours(oldest.getHours() - 50);
         this.blocks = this.blocks.filter(b => { return new Date(b.time) > oldest })
 
         // store locally to build up.  Used to populate data over 12 hours old, and to ensure data inst lost when you have to close the app
@@ -86,7 +86,7 @@ class MiningInfo {
     }
 
     /** Create output  */
-    GetLast(title, hr, time) {
+    GetLast(title, hr, time, endTime) {
         let start = new Date();
         if (hr) {
             start.setHours(start.getHours() - hr);
@@ -96,21 +96,37 @@ class MiningInfo {
         let sum = 0;
         let cnt = 0;
         let pending = 0;
+        let lastReported = 0;
+
         for (let i = 0; i < this.blocks.length; i++) {
             const blk = this.blocks[i];
-
             const blkTime = new Date(blk.time);
-            if (blkTime > start) {
-                if (blk.amount) {
-                    sum += blk.amount;
-                    cnt++;
+            if (!endTime) {
+                if (blkTime > start) {
+                    if (blk.amount) {
+                        sum += blk.amount;
+                        cnt++;
+                        if (!lastReported) {
+                            lastReported = blk.block
+                        }
+                    }
+                }
+            } else {
+                if (blkTime > start && blkTime < endTime) {
+                    if (blk.amount) {
+                        sum += blk.amount;
+                        cnt++;
+                        if (!lastReported) {
+                            lastReported = blk.block
+                        }
+                    }
                 }
             }
         }
         let coin = sum / 100000000;  // remove floating point logic
 
 
-        return `[${title} -- Blocks: ${cnt} - Mined: ${(coin).toFixed(2)} - $ Earned: $${((coin) * this.usd).toFixed(2)}]`
+        return `[${title} -- Blks Fnd: ${cnt.toString().padStart(4)}   - Coins Mined: ${(coin).toFixed(2).padStart(8)} - Earned: $${((coin) * this.usd).toFixed(2).padStart(8)}]`
     }
 }
 
@@ -126,16 +142,45 @@ const miner = new MiningInfo();
 
 function writeToConsole() {
     miner.UpdateStats().then(() => {
-        var startOfDay = new Date((new Date()).setHours(0, 0, 0, 0));
+        var start = new Date((new Date()).setHours(0, 0, 0, 0));
+        var end = new Date((new Date()).setHours(4, 0, 0, 0));
+        var startOfYesterday = new Date();
+        startOfYesterday.setDate(startOfYesterday.getDate() - 1);
+        startOfYesterday.setHours(0, 0, 0, 0);
         console.log('     ');
         console.log(`${new Date().toLocaleString()} -- Current Price: $${miner.usd}`);
-        console.log(`${miner.GetLast("  Today ", null, startOfDay)}`);
-        console.log(`${miner.GetLast(" 1 Hour ", 1)}`);
-        console.log(`${miner.GetLast(" 2 Hour ", 2)}`);
-        console.log(`${miner.GetLast(" 6 Hours", 6)}`);
-        console.log(`${miner.GetLast("12 Hours", 12)}`);
-        console.log(`${miner.GetLast("18 Hours", 18)}`);
-        console.log(`${miner.GetLast("24 Hours", 24)}`);
+        console.log(`${miner.GetLast("Today".padEnd(15), null, start)}`);
+        console.log(`${miner.GetLast("Yesterday".padEnd(15), null, startOfYesterday, start)}`);
+        console.log(`${miner.GetLast("1 Hour".padEnd(15), 1)}`);
+        console.log(`${miner.GetLast("2 Hour".padEnd(15), 2)}`);
+        console.log(`${miner.GetLast("6 Hours".padEnd(15), 6)}`);
+        console.log(`${miner.GetLast("12 Hours".padEnd(15), 12)}`);
+        console.log(`${miner.GetLast("18 Hours".padEnd(15), 18)}`);
+        console.log(`${miner.GetLast("24 Hours".padEnd(15), 24)}`);
+        console.log('----------')
+        console.log(`${miner.GetLast("12-04".padEnd(15), null, start, end)}`);
+        start = new Date((new Date()).setHours(4, 0, 0, 1));
+        end = new Date((new Date()).setHours(8, 0, 0, 0));
+        console.log(`${miner.GetLast("04-08".padEnd(15), null, start, end)}`);
+        start = new Date((new Date()).setHours(8, 0, 0, 1));
+        end = new Date((new Date()).setHours(12, 0, 0, 0));
+        console.log(`${miner.GetLast("08-12".padEnd(15), null, start, end)}`);
+        start = new Date((new Date()).setHours(12, 0, 0, 1));
+        end = new Date((new Date()).setHours(16, 0, 0, 0));
+        console.log(`${miner.GetLast("12-04".padEnd(15), null, start, end)}`);
+        start = new Date((new Date()).setHours(16, 0, 0, 1));
+        end = new Date((new Date()).setHours(20, 0, 0, 0));
+        console.log(`${miner.GetLast("04-08".padEnd(15), null, start, end)}`);
+        start = new Date((new Date()).setHours(20, 0, 0, 1));
+        end = new Date((new Date()).setHours(23, 59, 59, 0));
+        console.log(`${miner.GetLast("08-12".padEnd(15), null, start, end)}`);
+
+
+
+        // console.log(`${miner.GetLast("  6 Hours", 6)}`);
+        // console.log(`${miner.GetLast(" 12 Hours", 12)}`);
+        // console.log(`${miner.GetLast(" 18 Hours", 18)}`);
+        // console.log(`${miner.GetLast(" 24 Hours", 24)}`);
     });
 
 }
