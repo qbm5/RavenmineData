@@ -1,5 +1,5 @@
 # RavenmineData
-Very simple node script to read a bit of extra data from the ravenmine pool.  
+Very simple node script to read a bit of extra data from the ravencoin.flypool.org pool.  
 
 Only around 14 hours of data is available from teh API.  The app will keep collecting data in realtime if it remains open.
 
