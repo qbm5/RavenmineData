@@ -126,7 +126,7 @@ class MiningInfo {
         let coin = sum / 100000000;  // remove floating point logic
 
 
-        return `[${title} -- Blks Fnd: ${cnt.toString().padStart(4)}   - Coins Mined: ${(coin).toFixed(2).padStart(8)} - Earned: $${((coin) * this.usd).toFixed(2).padStart(8)}]`
+        return `${title}${cnt.toString().padStart(10)} ${(coin).toFixed(2).padStart(15)} ${('$' + ((coin) * this.usd).toFixed(2)).padStart(16)}`
     }
 }
 
@@ -149,6 +149,7 @@ function writeToConsole() {
         startOfYesterday.setHours(0, 0, 0, 0);
         console.log('     ');
         console.log(`${new Date().toLocaleString()} -- Current Price: $${miner.usd}`);
+        console.log(`${'Blocks Found'.padStart(25)}     Coins Mined           Earned`);
         console.log(`${miner.GetLast("Today".padEnd(15), null, start)}`);
         console.log(`${miner.GetLast("Yesterday".padEnd(15), null, startOfYesterday, start)}`);
         console.log(`${miner.GetLast("1 Hour".padEnd(15), 1)}`);
@@ -158,22 +159,22 @@ function writeToConsole() {
         console.log(`${miner.GetLast("18 Hours".padEnd(15), 18)}`);
         console.log(`${miner.GetLast("24 Hours".padEnd(15), 24)}`);
         console.log('----------')
-        console.log(`${miner.GetLast("12-04".padEnd(15), null, start, end)}`);
+        console.log(`${miner.GetLast("12am to 4am".padEnd(15), null, start, end)}`);
         start = new Date((new Date()).setHours(4, 0, 0, 1));
         end = new Date((new Date()).setHours(8, 0, 0, 0));
-        console.log(`${miner.GetLast("04-08".padEnd(15), null, start, end)}`);
+        console.log(`${miner.GetLast("4am  to 8am".padEnd(15), null, start, end)}`);
         start = new Date((new Date()).setHours(8, 0, 0, 1));
         end = new Date((new Date()).setHours(12, 0, 0, 0));
-        console.log(`${miner.GetLast("08-12".padEnd(15), null, start, end)}`);
+        console.log(`${miner.GetLast("8am  to 12pm".padEnd(15), null, start, end)}`);
         start = new Date((new Date()).setHours(12, 0, 0, 1));
         end = new Date((new Date()).setHours(16, 0, 0, 0));
-        console.log(`${miner.GetLast("12-04".padEnd(15), null, start, end)}`);
+        console.log(`${miner.GetLast("12pm to 4pm".padEnd(15), null, start, end)}`);
         start = new Date((new Date()).setHours(16, 0, 0, 1));
         end = new Date((new Date()).setHours(20, 0, 0, 0));
-        console.log(`${miner.GetLast("04-08".padEnd(15), null, start, end)}`);
+        console.log(`${miner.GetLast("4pm  to 8pm".padEnd(15), null, start, end)}`);
         start = new Date((new Date()).setHours(20, 0, 0, 1));
         end = new Date((new Date()).setHours(23, 59, 59, 0));
-        console.log(`${miner.GetLast("08-12".padEnd(15), null, start, end)}`);
+        console.log(`${miner.GetLast("8pm  to 12am".padEnd(15), null, start, end)}`);
 
 
 
