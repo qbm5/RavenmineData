@@ -16,6 +16,7 @@ run with:  node main --u walletxxxxxxxxxxxxxxxxxxxx
   
 
 Output updates every 60 seconds
-  
-  ![2021-08-30 16_26_52-Window](https://user-images.githubusercontent.com/18061986/131401624-305c11b2-a8a8-473a-9c80-3da8bf123ed0.png)
+
+![2021-09-01 12_57_20-C__WINDOWS_system32_cmd exe](https://user-images.githubusercontent.com/18061986/131712920-c6db347b-8479-4634-b127-a7f934b5f657.png)
+
 
